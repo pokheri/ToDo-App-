@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/repository/auth_repository.dart';
 import 'package:todo/routes/routes_name.dart';
 import 'package:todo/styles/button_style.dart';
 import 'package:todo/utils/theme.dart';
@@ -165,12 +166,15 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                         debugPrint(email);
                         debugPrint(password);
-                        debugPrint(confirmPassword);
+                        final value = await AuthApi.createAccount(email!, password!);
+                        if (value) {
+                          Navigator.pushNamed(context, Routes.login);
+                        }
                       } else {
                         debugPrint('got an erorr ');
                       }

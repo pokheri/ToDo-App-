@@ -3,8 +3,8 @@ import 'package:todo/routes/routes_name.dart';
 import 'package:todo/screens/home_page.dart';
 import 'package:todo/screens/authentication/login_page.dart';
 import 'package:todo/screens/authentication/register_page.dart';
-import 'package:todo/screens/authentication/reset_email_page.dart';
-import 'package:todo/screens/authentication/reset_password_page.dart';
+import 'package:todo/screens/authentication/request_otp.dart';
+import 'package:todo/screens/authentication/reset_password.dart';
 import 'package:todo/screens/welcome_page.dart';
 
 class AppRoutes {

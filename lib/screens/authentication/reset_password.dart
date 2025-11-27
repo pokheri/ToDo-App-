@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo/resources/auth_service.dart';
+import 'package:todo/repository/auth_repository.dart';
+import 'package:todo/routes/routes_name.dart';
 import 'package:todo/styles/button_style.dart';
 import 'package:todo/utils/theme.dart';
 
@@ -18,6 +19,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   bool isSecure = true;
   String? email;
   String? password;
+  String? otp;
   bool isLoadinSpinner = false;
 
   @override
@@ -79,13 +81,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           validator: (value) {
-                            if (value?.endsWith('@gmail.com') ?? false) {
+                            if (value != null && value.length == 4) {
                               return null;
                             }
-                            return "Enter valid email ";
+                            return "Enter valid 4 digit otp";
                           },
                           onSaved: (newValue) {
-                            email = newValue;
+                            otp = newValue;
                           },
                           decoration: InputDecoration(
                             errorText: null,
@@ -152,7 +154,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             try {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
-                                await authenticateUser(email!, password!, context);
+                                final value = await AuthApi.resetPassword(email!, password!, otp!);
+                                if (value) {
+                                  Navigator.pushNamed(context, Routes.login);
+                                }
                               } else {
                                 debugPrint('got an erorr ');
                               }

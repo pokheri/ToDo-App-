@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo/repository/auth_repository.dart';
+import 'package:todo/routes/routes_name.dart';
 import 'package:todo/styles/button_style.dart';
 import 'package:todo/utils/theme.dart';
 
@@ -11,7 +13,7 @@ class ResetEmailPage extends StatefulWidget {
 
 class _ResetEmailPageState extends State<ResetEmailPage> {
   String? email;
-  String? password;
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -75,11 +77,15 @@ class _ResetEmailPageState extends State<ResetEmailPage> {
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        debugPrint(email);
-                        debugPrint(password);
+
+                        final value = await AuthApi.requestOtp(email!);
+
+                        if (value) {
+                          Navigator.pushNamed(context, Routes.resetPassowrd);
+                        }
                       } else {
                         debugPrint('got an erorr ');
                       }

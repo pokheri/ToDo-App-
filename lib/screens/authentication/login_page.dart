@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo/resources/auth_service.dart';
+import 'package:todo/repository/auth_repository.dart';
 import 'package:todo/routes/routes_name.dart';
 import 'package:todo/styles/button_style.dart';
 import 'package:todo/utils/theme.dart';
@@ -143,7 +143,14 @@ class _LoginPageState extends State<LoginPage> {
                             try {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
-                                await authenticateUser(email!, password!, context);
+                                final isNavigate = await AuthApi.authenticateUser(
+                                  email!,
+                                  password!,
+                                );
+
+                                if (isNavigate) {
+                                  Navigator.pushReplacementNamed(context, Routes.home);
+                                }
                               } else {
                                 debugPrint('got an erorr ');
                               }

@@ -12,9 +12,8 @@ class WelcomePage extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: 400,
-              // color: Colors.red,
-              padding: EdgeInsets.fromLTRB(23, 23, 23, 0),
+              height: 350,
+              padding: EdgeInsets.only(left: 12, right: 12),
               margin: EdgeInsets.only(top: 100, bottom: 0),
 
               child: SvgPicture.asset("assets/images/welcome.svg"),
@@ -30,14 +29,14 @@ class WelcomePage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(15, 13, 15, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
               child: Text(
                 "Track your to-dos and win your day, one task at a time.",
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 100),
+            SizedBox(height: 50),
             OverflowBar(
               alignment: MainAxisAlignment.spaceAround,
               spacing: 23,
