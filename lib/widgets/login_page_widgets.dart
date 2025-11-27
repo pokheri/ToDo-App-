@@ -40,9 +40,9 @@ class BottomButtonNavigation extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 13,
           children: [
-            LoginIconButton(iconData: "assets/images/social.png", isImage: true),
+            LoginIconButton(iconData: "assets/icons/social.png", isImage: true),
             LoginIconButton(iconData: Icons.facebook),
-            LoginIconButton(iconData: 'assets/images/apple.png', isImage: true),
+            LoginIconButton(iconData: 'assets/icons/apple.png', isImage: true),
           ],
         ),
       ],

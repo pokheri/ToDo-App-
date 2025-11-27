@@ -6,4 +6,5 @@ class Routes {
   static const String welcome = '/welcome';
   static const String resetPassowrd = '/reset';
   static const String resetEmail = '/resetEmail';
+  static const String createTask = '/createTask';
 }

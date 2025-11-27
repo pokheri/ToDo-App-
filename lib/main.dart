@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo/routes/app_route.dart';
 import 'package:todo/routes/routes_name.dart';
 import 'package:todo/services/logout_handler.dart';
+import 'package:todo/utils/theme.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xffABE7B2),
+          seedColor: MyCustomTheme.textLabeldColor,
           brightness: Brightness.light,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -35,8 +36,11 @@ class MyApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           ),
         ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(iconColor: Colors.black, foregroundColor: Colors.black),
+        ),
       ),
-      initialRoute: Routes.welcome,
+      initialRoute: Routes.createTask,
 
       /// giving the initial route for the app
       routes:
