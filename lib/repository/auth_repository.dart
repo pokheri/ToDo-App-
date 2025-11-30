@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/services/api_client.dart';
+import 'package:todo/services/token_manager.dart';
 
 void showSnakbar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -15,6 +16,21 @@ void showSnakbar(BuildContext context, String message) {
 final dio = ApiClient.create();
 
 class AuthApi {
+  static Future<bool> initAuth() async {
+    final isRefresh = await TokenManager.getRefreshToken();
+
+    // await TokenManager.clear();
+    if (isRefresh != null) {
+      final response = await dio.get('auth/me/');
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    }
+    print('the refresh token is null ');
+    return false;
+  }
+
   static Future<bool> authenticateUser(String email, String password) async {
     final response = await dio.post('auth/login/', data: {"email": email, "password": password});
 

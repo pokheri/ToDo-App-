@@ -1,23 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:todo/repository/task_api.dart';
 
 class CreateTaskPage extends StatefulWidget {
-  const CreateTaskPage({super.key});
+  final int? taskId; // optional taskId for update
+  final String? title; // optional title for update
+  final String? description; // optional description for update
+
+  CreateTaskPage({super.key, this.title, this.description, this.taskId});
 
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();
 }
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
-  String currentDate = DateFormat('d MMM h:mm a').format(DateTime.now());
-
-  final _formKey = GlobalKey<FormState>();
-  String? title;
-  String? description;
-  bool valuePresent = true;
-
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String currentDate = DateFormat('d MMM h:mm a').format(DateTime.now());
+  bool valuePresent = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Assign controllers if task is being updated
+    titleController.text = widget.title ?? '';
+    descriptionController.text = widget.description ?? '';
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +41,32 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
       appBar: AppBar(
         actions: [
           TextButton.icon(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
 
                 if (valuePresent) {
-                  // send the api call other wise just pop up
-                } else {}
+                  bool success;
+
+                  if (widget.taskId != null) {
+                    // Update task
+                    success = await TaskApi.updateTask(
+                      titleController.text,
+                      descriptionController.text,
+                      '${widget.taskId}',
+                    );
+                  } else {
+                    // Create new task
+                    success = await TaskApi.createnewTask(
+                      titleController.text,
+                      descriptionController.text,
+                    );
+                  }
+
+                  if (success) {
+                    Navigator.pop(context);
+                  }
+                }
               }
             },
             label: Text('Done'),
@@ -55,7 +90,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                   TextFormField(
                     controller: titleController,
                     onSaved: (newValue) {
-                      title = newValue;
+                      // already using controller, so optional
                     },
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
@@ -63,7 +98,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                     decoration: _inputDecoration("Title"),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 5),
+                    padding: const EdgeInsets.only(left: 5, top: 4),
                     child: Text(
                       currentDate,
                       textAlign: TextAlign.left,
@@ -73,15 +108,17 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                   TextFormField(
                     controller: descriptionController,
                     validator: (value) {
-                      if (titleController.text.isEmpty && (value ?? " ").isEmpty) {
+                      if ((titleController.text.isEmpty) && ((value ?? "").isEmpty)) {
                         valuePresent = false;
+                      } else {
+                        valuePresent = true;
                       }
                       return null;
                     },
                     onSaved: (newValue) {
-                      description = newValue;
+                      // already using controller, so optional
                     },
-                    maxLines: 100,
+                    maxLines: 20,
                     keyboardType: TextInputType.multiline,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                     decoration: _inputDecoration("Description"),
